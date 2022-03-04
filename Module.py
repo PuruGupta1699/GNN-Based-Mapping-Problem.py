@@ -112,3 +112,18 @@ def full_glimpse(ref, from_, to_, initializer=tf.compat.v1.keras.initializers.Va
         glimpse = tf.multiply(ref, tf.expand_dims(attention_g,2))
         glimpse = tf.reduce_sum(input_tensor=glimpse,axis=1)
         return glimpse
+    
+    def Q_Net(action_dim):
+    I1 = Input(shape = (1, 128))
+    I2 = Input(shape = (1, 128))
+    I3 = Input(shape = (1, 128))
+
+    h1 = Flatten()(I1)
+    h2 = Flatten()(I2)
+    h3 = Flatten()(I3)
+
+    h = merge([h1,h2,h3],mode='concat')
+    V = Dense(action_dim,kernel_initializer='random_normal')(h)
+
+    model = Model(input=[I1,I2,I3],output=V)
+    return model
