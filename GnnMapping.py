@@ -1,4 +1,39 @@
+import sys
+import wandb
+from omegaconf import OmegaConf as omg
+import torch
+import numpy as np
+from agent import Agent
+from trainer import Trainer, reward_fn
+from data_generator_v2 import DataGenerator, SimulatedAnnealing
+import time
+import os
+import pandas as pd
+
+
 np.random.seed(16)
+
+
+def load_conf():
+    """Quick method to load configuration (using OmegaConf). By default,
+    configuration is loaded from the default config file (config.yaml).
+    Another config file can be specific through command line.
+    Also, configuration can be over-written by command line.
+
+    Returns:
+        OmegaConf.DictConfig: OmegaConf object representing the configuration.
+    """
+    default_conf = omg.create({"config" : "config.yaml"})
+
+    sys.argv = [a.strip("-") for a in sys.argv]
+    cli_conf = omg.from_cli()
+
+    yaml_file = omg.merge(default_conf, cli_conf).config
+
+    yaml_conf = omg.load(yaml_file)
+
+    return omg.merge(default_conf, yaml_conf, cli_conf) 
+
 
 def Adjacency(state):
     adj = []
