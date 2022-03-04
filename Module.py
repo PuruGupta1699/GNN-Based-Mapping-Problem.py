@@ -113,7 +113,7 @@ def full_glimpse(ref, from_, to_, initializer=tf.compat.v1.keras.initializers.Va
         glimpse = tf.reduce_sum(input_tensor=glimpse,axis=1)
         return glimpse
     
-    def Q_Net(action_dim):
+ def Q_Net(action_dim):
     I1 = Input(shape = (1, 128))
     I2 = Input(shape = (1, 128))
     I3 = Input(shape = (1, 128))
