@@ -33,6 +33,21 @@ class Embedding(nn.Module):
         emb_x = self.dense(x)   # [bs, out_dim, seq]
         return self.batch_norm(emb_x.transpose(1, 2)).transpose(1, 2)
 
+    
+    def Q_Net(action_dim):
+    I1 = Input(shape = (1, 128))
+    I2 = Input(shape = (1, 128))
+    I3 = Input(shape = (1, 128))
+
+    h1 = Flatten()(I1)
+    h2 = Flatten()(I2)
+    h3 = Flatten()(I3)
+
+    h = merge([h1,h2,h3],mode='concat')
+    V = Dense(action_dim,kernel_initializer='random_normal')(h)
+
+    model = Model(input=[I1,I2,I3],output=V)
+    return model
 
 class MultiHeadAttention(nn.Module):
     def __init__(self, n_hidden=512, num_heads=16, p_dropout=0.1):
